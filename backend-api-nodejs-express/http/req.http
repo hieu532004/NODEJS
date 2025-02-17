@@ -1,0 +1,26 @@
+POST http://localhost:3000/users
+
+// khớp với method POST và URL http://localhost:3000/users
+
+###
+
+
+```
+
+### 4. Test the API
+POST http://localhost:3000/users/9
+
+### 5. Test the API
+POST http://localhost:3000/users/2
+### 
+GET http://localhost:3000/product/1
+### 
+POST http://localhost:3000/product/2?page=12
+Content-Type: application/json
+
+{
+    "name": "product 2",
+    "price": 2000
+}
+###
+GET http://localhost:3000/product/3341214
