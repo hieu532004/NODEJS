@@ -1,12 +1,13 @@
 import express, { NextFunction, Request, Response } from 'express';
-import categoriesRouter from './routes/v1/categories.route';
 import createErrors from 'http-errors';
+//imoport route từ file bên ngoài
+import categoriesRouter from './routes/v1/categories.route';
+import brandsController from './routes/v1/brand.route';
 
 
 /*------------||BEGIN INIT APP||-------------- */
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 /*------------||BEGIN REGISTER ROUTES||-------------- */
 app.get('/', (req: Request, res: Response) => {
@@ -14,6 +15,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 //đăng ký một route từ file bên ngoài
 app.use('/api/v1/', categoriesRouter);
+app.use('/api/v1/', brandsController);
 /*------------||END HANDLE ROUTES||-------------- */
 
 // NO EDIT BEGIN HERE
@@ -23,7 +25,12 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
 });
 app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
     const statusCode = err.status || 500;
-    res.status(statusCode).json({ statusCode: statusCode, message: err.message });
+    res.status(statusCode).json({
+        statusCode: statusCode,
+        message: err.message,
+        data: null
+
+    });
 });
 /*------------||END HANDLE ERRORS||-------------- */
 

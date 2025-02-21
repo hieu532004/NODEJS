@@ -1,25 +1,25 @@
 GET http://localhost:8080/api/v1/categories
 ###
+GET http://localhost:8080/api/v1/categories/1
+###
 POST http://localhost:8080/api/v1/categories
-
 Content-Type: application/json
 
 {
     "id": 3,
-    "name": "Category 1",
-    "description": "Description 1"
+    "name": "Category 1"
 }
-{
-    "id": 4,
-    "name": "Category 1",
-    "description": "Description 4"
-}
+
+
+
 ###
-PUT http://localhost:8080/api/v1/categories/4
+PUT http://localhost:8080/api/v1/categories/1
 
 Content-Type: application/json
 
 {
-    "name": "Category 12",
-    "description": "Description 3"
+    "id": 22,
+    "name": "Category 22"
 }
+###
+DELETE http://localhost:8080/api/v1/categories/2

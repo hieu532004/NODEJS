@@ -1,8 +1,7 @@
 import express from 'express';
-import createErrors from 'http-errors';
-import categoriesController from '../../controllers/categorie.controller';
 const router = express.Router();
-
+import categoriesController from '../../controllers/categorie.controller';
+/* Route để định tuyến Path <===> controller */
 //Get All Categories
 // GET api/v1/categories
 router.get('/categories', categoriesController.getAll);
@@ -21,7 +20,4 @@ router.put('/categories/:id', categoriesController.update);
 //Delete Category
 // DELETE api/v1/categories/:id
 router.delete('/categories/:id', categoriesController.deleteById);
-
-// Tất cả các route được gọi là resource API (RESTful API) = bao gồm các phương thức HTTP: GET, POST, PUT, DELETE
-
 export default router;
