@@ -1,50 +1,49 @@
 import createErrors from 'http-errors';
+import categoryModel from '../models/category.model';
+import { ICateghoryCreatePayload } from '../types/model';
+import { ObjectId } from 'mongoose';
 /**
  * SERVICE
  * - Nhận đầu vào từ controller
  * - Xử lý logic business
  * - Lấy dữ liệu return cho controller
 */
-const categories = [
-    { id: 1, name: 'Laptop' },
-    { id: 2, name: 'Smartphone' }
-];
-
-const getAll = () => {
+const getAll = async () => {
+    const categories = await categoryModel.find();
+    console.log('<<=====🚀 categories 🚀=====>>', categories); // 🛠 Debug
     return categories;
 }
 
-const getById = (id: number) => {
-    const category = categories.find((category) => category.id === Number(id));
+const getById = async (id: ObjectId) => {
+   const category = await categoryModel.findById(id);
     if (!category) {
         throw createErrors(400, 'Category not found');
     }
     return category;
 }
 
-const create = (payload: { id: number, name: string }) => {
+const create = async (payload: ICateghoryCreatePayload) => {
     console.log('Received payload:', payload); // 🛠 Debug
-    if (!payload || !payload.id || !payload.name) {
-        throw createErrors(400, 'Invalid payload');
-    }
-    categories.push(payload);
+    // Tao moi category
+    const category = new categoryModel(payload);
+    // Luu vao db
+    await category.save();
+    // Tra ve item vua tao
     return payload;
 }
 
-const updateById = (id: number, payload: { id: number, name: string }) => {
-    const categoryIndex = categories.findIndex((category) => category.id === Number(id));
-    if (categoryIndex === -1) {
+const updateById = async (id: ObjectId, payload: ICateghoryCreatePayload) => {
+    const category = await categoryModel.findByIdAndUpdate(id, payload, { new: true });
+    if (!category) {
         throw createErrors(400, 'Category not found');
     }
-    categories[categoryIndex] = payload;
-    return payload;
+    return category;
 }
 
-const deleteById = (id: number) => {
-    const categoryIndex = categories.findIndex((category) => category.id === Number(id));
-    if (categoryIndex === -1) {
+const deleteById = async (id: ObjectId) => {
+    const category = await categoryModel.findByIdAndDelete(id);
+    if (!category) {
         throw createErrors(400, 'Category not found');
     }
-    categories.splice(categoryIndex, 1);
 }
 export default { getAll, getById, create, updateById, deleteById };

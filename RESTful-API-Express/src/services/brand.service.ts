@@ -1,29 +1,31 @@
 import createHttpError from "http-errors";
+import testModel from "../models/test.model";
+import brandModel from "../models/brand.model";
+import { ObjectId } from "mongoose";
+import { ICateghoryCreatePayload } from "../types/model";
 
 const brands = [
     { id: 1, name: 'Apple' },
     { id: 2, name: 'Samsung' }
 ];
 
-const getAll = () => {
+const getAll = async () => {
+    const brands = await brandModel.find();
+    console.log('<<=====🚀 brands 🚀=====>>', brands); // 🛠 Debug
     return brands;
 }
 
-const getById = (id: number) => {
-    const brand = brands.find((brand) => brand.id === Number(id));
+const getById = async (id: ObjectId) => {
+    const brand = await brandModel.findById(id);
     if (!brand) {
         throw createHttpError(400, 'Brand not found');
-    }
-    return brand;
+    }   
 }
 
-const create = (payload: { id: number, name: string }) => {
-    console.log('Received payload:', payload); // 🛠 Debug
-    if (!payload || !payload.id || !payload.name) {
-        throw createHttpError(400, 'Invalid payload');
-    }
-    brands.push(payload);
-    return payload;
+const create = async (payload: ICateghoryCreatePayload ) => {
+     console.log('<<=====🚀 payload =====>>',payload);// 🛠 Debug
+    const brand = await brandModel.create(payload);
+    return brand;
 }
 
 const updateById = (id: number, payload: { id: number, name: string }) => {

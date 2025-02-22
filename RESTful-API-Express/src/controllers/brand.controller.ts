@@ -1,37 +1,45 @@
 import brandsService from "../services/brand.service";
-import { Request, Response } from 'express';
-import { httpStatus, sendJSONResponse } from '../helpers/response.helper';
-
-const getAll = (req: Request, res: Response) => {
-    const brands = brandsService.getAll();
+import { NextFunction, Request, Response } from 'express';
+import { httpStatus, sendJSONResponse } from '../helpers/response.helper';   
+const getAll = async (req: Request, res: Response) => {
+    const brands = await brandsService.getAll();
     // res.status(200).json(brands);
     sendJSONResponse(res, 200, 'Success', brands);
 }
 
-const getById = (req: Request, res: Response) => {
+const getById =  (req: Request, res: Response) => {
     const { id } = req.params;
-    const brand = brandsService.getById(Number(id));
-    res.status(200).json(brand);
+    const { ObjectId } = require('mongodb');
+    const brand =  brandsService.getById(new ObjectId(id));
+    // res.status(200).json(brand);
+    sendJSONResponse(res, 200, 'Success', brand);
 }
 
-const create = (req: Request, res: Response) => {
+const create = async (req: Request, res: Response, next: NextFunction) => {
+  try {
     const payload = req.body;
-    const brand = brandsService.create(payload);
+    const brand = await brandsService.create(payload);
     // res.status(200).json(brand);
-    sendJSONResponse(res, httpStatus.CREATED.statusCode, httpStatus.CREATED.message, brand);
+    sendJSONResponse(res, 200, 'Success', brand);
+  } catch (error) {
+    next(error);
+  }
 }
 
 const update = (req: Request, res: Response) => {
     const { id } = req.params;
     const payload = req.body;
-    const result = brandsService.updateById(Number(id), payload);
+    const { ObjectId } = require('mongodb');
+    const result = brandsService.updateById(new ObjectId(id), payload);
     res.status(200).json(result);
 }
 
 const deleteById = (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = brandsService.deleteById(Number(id));
+    const { ObjectId } = require('mongodb');
+    const result = brandsService.deleteById(new ObjectId(id));
     res.status(200).json(result);
 }
 
 export default { getAll, getById, create, update, deleteById };
+// Compare this snippet from RESTful-API-Express/src/routes/v2/brands.route.ts:
