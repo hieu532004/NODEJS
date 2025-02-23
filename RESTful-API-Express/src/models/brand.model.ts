@@ -1,5 +1,5 @@
-import { kMaxLength } from "buffer";
 import { Schema, model } from "mongoose";
+
 const brandSchema = new Schema({
     brand_name: { type: String, required: true, unique: true, minlength: 3, maxlength: 50, trim: true },
     description: { type: String, maxLength: 1000, trim: true, default: '' },

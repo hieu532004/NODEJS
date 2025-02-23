@@ -1,0 +1,23 @@
+### GET ALL
+GET http://localhost:8000/api/v1/brands
+
+
+### GET One
+GET http://localhost:8000/api/v1/brands/2
+
+### create
+POST http://localhost:8000/api/v1/brands
+Content-Type: application/json
+
+{
+  "brand_name": "Electricity",
+  "description": "Electricity is a brand that sells electronics"
+}
+
+### uPDATE
+PUT http://localhost:8000/api/v1/brands/67bb343f23cad6d0dda66530
+Content-Type: application/json
+
+{
+  "name": "Toyota"
+}

@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import createErrors from 'http-errors';
 //imoport route từ file bên ngoài
 import categoriesRouter from './routes/v1/categories.route';
-import brandsController from './routes/v1/brand.route';
+import brandsRouter from './routes/v1/brand.route';
 
 
 /*------------||BEGIN INIT APP||-------------- */
@@ -15,7 +15,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 //đăng ký một route từ file bên ngoài
 app.use('/api/v1/', categoriesRouter);
-app.use('/api/v1/', brandsController);
+app.use('/api/v1/', brandsRouter);
 /*------------||END HANDLE ROUTES||-------------- */
 
 // NO EDIT BEGIN HERE

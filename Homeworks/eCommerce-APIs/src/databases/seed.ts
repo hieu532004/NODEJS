@@ -4,6 +4,7 @@ import { env } from "../helpers/env.helper"
 import Brand from '../models/brand.model';
 import Category from '../models/category.model';
 
+
 //Step 1: Ket noi Database su dung mongoose
 const mongooseDbOptions = {
     autoIndex: true, // Don't build indexes
@@ -25,32 +26,6 @@ mongoose
 
 //step 2: Su dung cac model de ket noi den collection
 const fakeData = async () => {
-
-    //new fake 5 brand
-    // for (let index = 1; index <= 5; index++) {
-    //   const brand = new Brand({
-    //     brand_name: faker.company.buzzNoun()+index,
-    //     description: faker.company.catchPhrase(),
-    //   });
-    //   await brand.save();
-    //   console.log('Fake brand is success', index);
-
-    // }
-
-    // insert 5 fake categories
-    // for (let index = 1; index <= 5; index++) {
-    //   //dien thoai
-    //   const categoryName = faker.commerce.department()+index;
-    //   const category = new Category({
-    //     category_name: categoryName,
-    //      description: faker.lorem.word(50),
-    //      //dien-thoai
-    //      slug: faker.helpers.slugify(categoryName),
-    //   });
-    //   await category.save();
-    //   console.log('Fake categoryName is success', index);
-
-    //}
 
     const currentBrands = await Brand.find();
     const currentCategories = await Category.find();
@@ -75,6 +50,9 @@ const fakeData = async () => {
             slug: faker.helpers.slugify(productName), // Tạo slug từ productName
         }
 
+        // const product = new Product(fakeProduct);
+        // await product.save();
+        // console.log(`Create Product ${i} successfully !`);
 
     }
 

@@ -1,5 +1,4 @@
 import express from 'express';
-import createErrors from 'http-errors';
 import brandsController from '../../controllers/categorie.controller';
 const router = express.Router();
 
