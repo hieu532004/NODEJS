@@ -1,8 +1,9 @@
 import mongoose from 'mongoose'
 import { faker } from '@faker-js/faker';
 import { env } from "../helpers/env.helper"
-import Brand from '../models/brand.model';
+import { Brand}  from '../models/brand.model';
 import Category from '../models/category.model';
+import  Product  from '../models/product.model';
 
 
 //Step 1: Ket noi Database su dung mongoose
@@ -50,9 +51,9 @@ const fakeData = async () => {
             slug: faker.helpers.slugify(productName), // Tạo slug từ productName
         }
 
-        // const product = new Product(fakeProduct);
-        // await product.save();
-        // console.log(`Create Product ${i} successfully !`);
+        const product = new Product(fakeProduct);
+        await product.save();
+        console.log(`Create Product ${i} successfully !`);
 
     }
 

@@ -1,72 +1,38 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document, Types } from "mongoose";
+import { generateSlug } from '../helpers/slugify.helper'
 
-const productSchema = new Schema({
-    product_name: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        minLength: [3, "Tên sản phẩm phải từ 3 đến 255 kí tự"],
-        maxLength: [255, "Tối đa 255 kí tự"], // Tên sản phẩm
-    },
-    price: {
-        type: Number,
-        require: false,
-        min: 0,
-        default: 0
-    },
-    discount: {
-        type: Number,
-        require: false,
-        min: 0,
-        max: 70,
-        default: 0
-    },
-    description: {
-        type: String,
-        maxLength: 255,
-        required: false, //
-        trim: true
-    },
-    model_year: {
-        type: Number,
-        required: true
-    },
-    stock: {
-        type: Number,
-        min: 0,
-        default: 10
-    },
-    slug: {
-        type: String,
-        minLength: 3,
-        maxLength: 255,
-        required: true,
-        unique: true,
-        lowercase: true,
-    },
-    thumbnail: {
-        type: String,
-        required: false,
-        trim: true
-    },
-    //Tham chiếu
-    category: {
-        type: Schema.Types.ObjectId,
-        //tham chiếu tới _id model Category
-        ref: 'Category',
-        require: true,
-    },
-    brand_id: {
-        type: Schema.Types.ObjectId,
-        //tham chiếu tới _id model Category
-        ref: 'Brand',
-        require: true,
+interface IProduct extends Document {
+    product_id: number;
+    product_name: string;
+    price: number;
+    discount: number;
+    category_id: Types.ObjectId;
+    brand_id: Types.ObjectId;
+    description?: string;
+    model_year: number;
+    slug?: string;
+    thumbnail?: string;
+    stock: number;
+}
+const productSchema = new Schema<IProduct>({
+    product_id: { type: Number, required: true, unique: true },
+    product_name: { type: String, required: true, unique: true },
+    price: { type: Number, required: true, min: 0 },
+    discount: { type: Number, required: true, min: 0, max: 70, default: 0 },
+    category_id: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+    brand_id: { type: Schema.Types.ObjectId, ref: 'Brand', required: true },
+    description: { type: String },
+    model_year: { type: Number, required: true },
+    slug: { type: String, unique: true },
+    thumbnail: { type: String },
+    stock: { type: Number, required: true, min: 0, default: 0 }
+});
+
+productSchema.pre('save', function (next) {
+    if (!this.slug) {
+        this.slug = generateSlug(this.product_name);
     }
+    next();
+});
 
-}, {
-    timestamps: true,
-    versionKey: false
-})
-
-export default model("Product", productSchema);
+export default model<IProduct>("Product", productSchema);

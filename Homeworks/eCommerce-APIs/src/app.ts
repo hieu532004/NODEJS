@@ -4,6 +4,11 @@ import createError from 'http-errors';
 // Import routes
 import categoriesRouter from './routes/v1/categories.route'
 import brandsRouter from './routes/v1/brands.route'
+import productsRouter from './routes/v1/products.route'
+import customerRouter from './routes/v1/customer.route'
+import staffRouter from './routes/v1/staff.route'
+import ordersRouter from './routes/v1/orders.route'
+
 /** -------|| INITIAL APP || --------- */
 const app = express();
 app.use(express.json());
@@ -16,6 +21,10 @@ app.get('/', (req: Request, res: Response) => {
 //Đăng ký một route từ file bên ngoài
 app.use('/api/v1', categoriesRouter);
 app.use('/api/v1', brandsRouter);
+app.use('/api/v1', productsRouter);
+app.use('/api/v1', customerRouter);
+app.use('/api/v1', staffRouter);
+app.use('/api/v1', ordersRouter);
 /** -------|| END REGISTER ROUTES || --------- */
 
 // NO EDIT BEGIN HERE

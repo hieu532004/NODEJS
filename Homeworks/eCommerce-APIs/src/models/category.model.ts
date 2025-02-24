@@ -1,8 +1,13 @@
-import { lchown } from "fs";
-import { Schema, model } from "mongoose";
 
-
-const categorySchema = new Schema({
+import { Schema, model, Document } from "mongoose";
+import { generateSlug } from '../helpers/slugify.helper';
+interface ICategory extends Document {
+    category_id: number;
+    category_name: string;
+    description?: string;
+    slug: string;
+  }
+const categorySchema = new Schema<ICategory> ({
     category_name: {
         type: String,
         maxLength: 50,
@@ -22,5 +27,10 @@ const categorySchema = new Schema({
         lowercase: true,
     }
 })
-
-export default model('Category', categorySchema);
+categorySchema.pre('save', function (next) {
+    if (!this.slug) {
+      this.slug = generateSlug(this.category_name);
+    }
+    next();
+  });
+export default model<ICategory>('Category', categorySchema);

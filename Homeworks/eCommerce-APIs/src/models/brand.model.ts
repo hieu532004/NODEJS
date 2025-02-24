@@ -1,6 +1,13 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
+import { generateSlug } from '../helpers/slugify.helper';
 
-const brandSchema = new Schema({
+interface IBrand extends Document {
+    brand_id: number;
+    brand_name: string;
+    description?: string;
+    slug: string;
+  }
+const brandSchema = new Schema<IBrand>({
     brand_name: {
         type: String,
         required: true, // NOT NULL
@@ -21,5 +28,10 @@ const brandSchema = new Schema({
         versionKey: false, // bỏ đi trường __v
         collection: "brands" // tùy chỉnh tên collection để tiện quản lý
      })
-
-export default model("Brand", brandSchema);
+     brandSchema.pre('save', function (next) {
+        if (!this.slug) {
+          this.slug = generateSlug(this.brand_name);
+        }
+        next();
+      });
+      export const Brand = model<IBrand>('Brand', brandSchema);
