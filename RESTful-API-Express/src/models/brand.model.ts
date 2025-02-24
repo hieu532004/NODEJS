@@ -1,13 +1,24 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 const brandSchema = new Schema({
-    brand_name: { type: String, required: true, unique: true, minlength: 3, maxlength: 50, trim: true },
-    description: { type: String, maxLength: 1000, trim: true, default: '' },
+    brand_name: {
+        type: String,
+        required: true,
+        unique: true, // Not null
+        minlength: [4, 'tối thiểu phải 4 kí tự'],
+        maxlength: 50, //độ dài tối đa
+    },
+    description: {
+        type: String,
+        maxlength: 500,
+        trim: true,// xóa khoảng trắng ở đầu và cuối 
+        default: ""// giá trị mặc định 
+    },
 },
     {
-        timestamps: true, // tự động thêm 2 trường thời gian tạo và cập nhật
-        versionKey: false, // không tự động thêm trường _v
-        collection: 'brand' // tên của collection trong MongoDB
+        timestamps: true,// Tự động sinh ra hai trường createAt và updateAt
+        versionKey: false, // bỏ đi trường __v
+        collection: "brands" // tùy chỉnh tên collection để tiện quản lý 
+    })
 
-    });
-export default model('Brand', brandSchema);
+export default model("Brand", brandSchema)

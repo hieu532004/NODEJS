@@ -1,5 +1,5 @@
 import express from 'express';
-import brandsController from '../../controllers/categorie.controller';
+import brandsController from '../../controllers/categories.controller';
 const router = express.Router();
 
 //Get All Brands
@@ -15,7 +15,7 @@ router.post('/brands', brandsController.create);
 
 //Update Category
 // PUT api/v1/brands/:id
-router.put('/brands/:id', brandsController.update);
+router.put('/brands/:id', brandsController.updateById);
 
 //Delete Category
 // DELETE api/v1/brands/:id

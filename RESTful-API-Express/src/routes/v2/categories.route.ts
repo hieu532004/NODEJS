@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import categoriesController from '../../controllers/categorie.controller';
+import categoriesController from '../../controllers/categories.controller';
 /* Route để định tuyến Path <===> controller */
 //Get All Categories
 // GET api/v1/categories
