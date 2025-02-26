@@ -4,7 +4,7 @@ import slugify from 'slugify'; // Thư viện để tự động tạo slug
 // Định nghĩa cấu trúc của collection category
 const categorySchema = new Schema(
   {
-    categoryName: { // Đổi tên thành camelCase cho chuẩn JavaScript
+    category_name: { 
       type: String,
       maxLength: [50, 'Tên danh mục không được vượt quá 50 ký tự'], // Thêm thông báo lỗi
       required: [true, 'Tên danh mục là bắt buộc'], // Thông báo lỗi tùy chỉnh
@@ -36,7 +36,7 @@ const categorySchema = new Schema(
 // Tự động sinh slug từ categoryName trước khi lưu
 categorySchema.pre('save', function (next) {
   if (this.isModified('categoryName')) {
-    this.slug = slugify(this.categoryName, { lower: true, strict: true });
+    this.slug = slugify(this.category_name, { lower: true, strict: true });
   }
   next();
 });

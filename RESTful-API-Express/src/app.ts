@@ -3,6 +3,7 @@ import createErrors from 'http-errors';
 //imoport route từ file bên ngoài
 import categoriesRouter from './routes/v1/categories.route';
 import brandsRouter from './routes/v1/brands.route';
+import queriesRouter from './routes/v1/queries.route'
 
 
 /*------------||BEGIN INIT APP||-------------- */
@@ -16,6 +17,7 @@ app.get('/', (req: Request, res: Response) => {
 //đăng ký một route từ file bên ngoài
 app.use('/api/v1/', brandsRouter);
 app.use('/api/v1/', categoriesRouter);
+app.use('/api/v1/', queriesRouter)
 /*------------||END HANDLE ROUTES||-------------- */
 
 // NO EDIT BEGIN HERE

@@ -1,5 +1,5 @@
 import express from 'express';
-import brandsController from '../../controllers/categories.controller';
+import brandsController from '../../controllers/brands.controller';
 const router = express.Router();
 
 //Get All Brands
