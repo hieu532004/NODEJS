@@ -61,7 +61,7 @@ const productSchema = new Schema({
     },
     brand_id: {
         type: Schema.Types.ObjectId,
-        ref: 'brand', // tham chieu den id model brand
+        ref: 'Brand', // tham chieu den id model brand
         required: true
     }
 }, {
