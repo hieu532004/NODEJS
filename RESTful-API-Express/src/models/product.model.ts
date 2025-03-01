@@ -1,73 +1,72 @@
 import { Schema, model } from "mongoose";
-import slugify from "slugify";
 
 const productSchema = new Schema({
     product_name: {
         type: String,
         required: true,
         unique: true,
-        minlength: [3, 'Phải nhập 3 kí tự trở lên'],
-        maxlength: [255, "Tên sản phẩm không được vượt quá 255 kí tự"],
         trim: true,
+        minLength: [3, "Tên sản phẩm phải từ 3 đến 255 kí tự"],
+        maxLength: [255, "Tối đa 255 kí tự"], // Tên sản phẩm
     },
     price: {
         type: Number,
-        required: false,
+        require: false,
         min: 0,
-        default: 0,
+        default: 0
     },
     discount: {
         type: Number,
-        required: false,// không yêu cầu điền 
+        require: false,
         min: 0,
         max: 70,
-        default: 0,
+        default: 0
     },
     description: {
         type: String,
-        maxlength: 255,
-        required: false,
-        trim: true,
+        maxLength: 255,
+        required: false, //
+        trim: true
     },
     model_year: {
         type: Number,
-        required: true,
+        required: true
     },
     stock: {
         type: Number,
         min: 0,
-        default: 10,
+        default: 10
     },
     slug: {
         type: String,
+        minLength: 3,
+        maxLength: 255,
         required: true,
         unique: true,
-        minlength: 3,
-        maxlength: 255,
-        trim: true,
-        lowercase: true
+        lowercase: true,
     },
     thumbnail: {
         type: String,
         required: false,
-        maxlength: 255,
-        trim: true, // cắt ký tự trắng ở đàu và cuối chuỗi
+        trim: true
     },
-    //tham chieu
+    //Tham chiếu
     category: {
         type: Schema.Types.ObjectId,
-        ref: 'Category',// tham chieu toi id cua model category
-        required: true
+        //tham chiếu tới _id model Category
+        ref: 'Category', 
+        require: true,
     },
     brand_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Brand', // tham chieu den id model brand
-        required: true
+        //tham chiếu tới _id model Category
+        ref: 'Brand',
+        require: true,
     }
-}, {
-    timestamps: true, // Tự động sinh ra hai trường createAt và updateAt
-    versionKey: false, // bỏ đi trường __v
-    collection: "products" // tùy chỉnh tên collection để tiện quản lý
+
+},{
+    timestamps: true,
+    versionKey: false
 })
 
-export default model('Product', productSchema);
+export default model("Product", productSchema);

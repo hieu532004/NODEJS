@@ -1,0 +1,29 @@
+GET http://localhost:8082/api/v1/products
+###
+GET http://localhost:8082/api/v1/products/1
+
+###
+POST http://localhost:8082/api/v1/saffs
+Content-Type: application/json
+
+{
+    "first_name": "Trung1",
+    "last_name": "Hieu1",
+    "email": "hung@gmail.com",
+    "password": "123456789",
+    "active": "true"
+}
+
+
+###
+PUT http://localhost:8082/api/v1/products/67c32eb49a2a181056f6e64d
+
+Content-Type: application/json
+
+{
+    "category_name": "MINI",
+    
+    
+}
+###
+DELETE http://localhost:8082/api/v1/products/67c32ee0894026a777b315e3
