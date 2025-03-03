@@ -7,16 +7,16 @@ import { DataSource } from 'typeorm';
  * https://typeorm.io/#/connection-options
  */
 export const myDataSource = new DataSource({
-  type: 'mssql', //Loại Database
-  host: 'HIEUPC', //Computer Name
-  port: 1433, // cổng mặc định của server SQL
-  username: 'hieudev', //Username Database
-  password: '123456789', //Password Database
-  database: 'LearnNodejs', //Tên Database
-  entities: ['src/entities/*.entity{.ts,.js}'], //Chỉ rõ thư mục chứa các file entity
-  synchronize: true, //Đồng bộ với Database
-  logging: false, //ghi log
+  type: process.env.DB_TYPE as 'mssql', // Loại Database
+  host: process.env.DB_HOST, // Computer Name
+  port: parseInt(process.env.DB_PORT || '1433', 10), // Cổng mặc định của server SQL
+  username: process.env.DB_USERNAME, // Username Database
+  password: process.env.DB_PASSWORD, // Password Database
+  database: process.env.DB_DATABASE, // Tên Database
+  entities: [process.env.DB_ENTITIES || 'src/entities/*.entity{.ts,.js}'], // Đường dẫn đến entities
+  synchronize: process.env.DB_SYNCHRONIZE === 'true', // Đồng bộ với Database
+  logging: process.env.DB_LOGGING === 'true', // Ghi log
   options: {
-    encrypt: false, //True khi chạy trên production
+    encrypt: process.env.DB_ENCRYPT === 'true', // True khi chạy trên production
   },
 });

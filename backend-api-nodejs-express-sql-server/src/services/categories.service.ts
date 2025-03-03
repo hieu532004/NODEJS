@@ -1,5 +1,4 @@
 import createError from 'http-errors';
-import Category from '../models/category.model';
 import { buildSlug } from '../helpers/slugify.helper';
 
 const getAll = async (query: any) => {
