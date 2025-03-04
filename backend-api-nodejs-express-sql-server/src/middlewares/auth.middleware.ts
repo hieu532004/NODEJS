@@ -1,13 +1,14 @@
 import jwt, { JwtPayload }  from 'jsonwebtoken'
 import { Request, Response, NextFunction } from "express";
 import createError from 'http-errors';
-import Staff from '../models/staff.model';
+import {Staff} from '../entities/staff.entity';
 import { env } from '../helpers/env.helper';
+import { myDataSource } from '../data-source';
 
 interface decodedJWT extends JwtPayload {
    _id?: string
  }
-
+const staffRepository = myDataSource.getRepository(Staff);
 export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
   //Get the jwt token from the head
     const authHeader = req.headers['authorization'];
@@ -22,7 +23,7 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
     try {
       const decoded = jwt.verify(token, env.JWT_SECRET as string) as decodedJWT;
       //try verify staff exits in database
-      const staff = await Staff.findById(decoded._id);
+      const staff = await staffRepository.findOneBy(decoded.staff_id);
 
       if (!staff) {
         return next(createError(401, 'Unauthorized'));

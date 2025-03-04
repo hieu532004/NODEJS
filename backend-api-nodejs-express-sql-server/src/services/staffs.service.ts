@@ -2,83 +2,72 @@ import createError from 'http-errors';
 import { myDataSource } from '../data-source';
 import { Staff } from '../entities/staff.entity';
 
-
 const staffRepository = myDataSource.getRepository(Staff);
 
 const getAll = async (query: any) => {
+    const { page = 1, limit = 10, sort_type = 'desc', sort_by = 'createdAt', staff_name, staff } = query;
 
-    const { page = 1, limit = 10 } = query;
+    const sortObject = { [sort_by]: sort_type === 'desc' ? 'DESC' : 'ASC' };
 
-    //Nếu tồn tại sortType và sortBy thì sẽ sắp xếp theo sortType và sortBy
-    //Nếu không tồn tại thì sẽ sắp xếp theo createdAt
-    let sortObject = {};
-    const sortType = query.sort_type || 'desc';
-    const sortBy = query.sort_by || 'createdAt';
-    sortObject = { ...sortObject, [sortBy]: sortType === 'desc' ? -1 : 1 };
-
-    console.log('<<=== 🚀sortObject  ===>>', sortObject);
-
-    //Tìm kiếm theo điều kiện
-    let where = {};
-    //Nếu có tìm kiếm theo tên sản phẩm
-    if (query.staff_name && query.staff_name.length > 0) {
-        where = { ...where, staff_name: { $regex: query.staff_name, $options: 'i' } };
+    const where: any = {};
+    if (staff_name) {
+        where.staff_name = { $regex: staff_name, $options: 'i' };
     }
-    //Nếu tìm kiếm theo danh mục
-    if (query.staff && query.staff.length > 0) {
-        where = { ...where, staff: query.staff };
+    if (staff) {
+        where.staff = staff;
     }
 
-    const staffs = await staffRepository.find();
+    const [staffs, total] = await staffRepository.findAndCount({
+        where,
+        order: sortObject,
+        skip: (page - 1) * limit,
+        take: limit,
+    });
 
-    return staffs;
-
+    return { staffs, total, page, limit };
 };
 
-const getById = async (id: string) => {
-    const staff = await Staff.findById(id);
+const getById = async (id: number) => {
+    const staff = await staffRepository.findOneBy({ staff_id: id });
     if (!staff) {
         throw createError(400, 'Staff not found');
     }
     return staff;
-}
-const create = async (payload: any) => {
-    const staff = staffRepository.create(payload)
-    //lu lai
-    await staffRepository.save(staff)
-    return staff;
-}
+};
 
-const updateById = async (id: string, payload: any) => {
-    //Kiểm tra xem sản phẩm có tồn tại không với id
+const create = async (payload: any) => {
+    const staff = staffRepository.create(payload);
+    await staffRepository.save(staff);
+    return staff;
+};
+
+const updateById = async (id: number, payload: any) => {
     const staff = await getById(id);
 
-    //kiểm tra email có tồn tại không
-    const staffExist = await Staff.findOne({
-        email: payload.email,
-        _id: { $ne: id }
-    })
+    const staffExist = await staffRepository.createQueryBuilder('staff')
+        .where('staff.email = :email', { email: payload.email })
+        .andWhere('staff.staff_id != :id', { id })
+        .getOne();
+
     if (staffExist) {
         throw createError(400, 'Email already exists');
     }
 
-    Object.assign(staff, payload); //trộn dữ liệu cũ và mới
-    await staff.save();
+    Object.assign(staff, payload);
+    await staffRepository.save(staff);
     return staff;
-}
+};
 
-const deleteById = async (id: string) => {
-    //Kiểm tra xem sản phẩm có tồn tại không với id
+const deleteById = async (id: number) => {
     const staff = await getById(id);
-    //xóa sản phẩm
-    await Staff.deleteOne({ _id: staff._id });
+    await staffRepository.remove(staff);
     return staff;
-}
+};
 
 export default {
     getAll,
     getById,
     create,
     updateById,
-    deleteById
-}
+    deleteById,
+};

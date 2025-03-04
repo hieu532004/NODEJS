@@ -3,14 +3,15 @@ GET http://localhost:8080/api/v1/categories
 
 
 ### GET One
-GET http://localhost:8080/api/v1/categories/2
+GET http://localhost:8080/api/v1/categories/1
 
 ### create
 POST http://localhost:8080/api/v1/categories
 Content-Type: application/json
 
 {
-  "category_name": "Nin"
+  "category_id": "1",
+  "category_name": "Shoes"
 }
 
 ### uPDATE

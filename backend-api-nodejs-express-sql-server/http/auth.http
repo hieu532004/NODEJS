@@ -11,8 +11,8 @@ POST http://localhost:8080/api/v1/auth/login
 Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
-    "password": "12345678"
+    "email": "admindev@gmail.com",
+    "password": "123456789"
 }
 
 ### Get Profile

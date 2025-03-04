@@ -1,9 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
-import slugify from 'slugify';
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, OneToMany } from 'typeorm';
 import createError from 'http-errors';
-import { validateOrReject } from 'class-validator';
+import { Length, validateOrReject } from 'class-validator';
+import { O } from '@faker-js/faker/dist/airline-BcEu2nRk';
+import { Product } from './product.entity';
 
-@Entity('categories') // Tên bảng trong database
+@Entity({name: 'categories'}) // Tên bảng trong database
 export class Category {
     @PrimaryGeneratedColumn({
         type: 'int',
@@ -12,12 +13,11 @@ export class Category {
     })
     category_id: number;
 
+    @Length(3, 50, { message: 'Category name must be between 3 and 50 characters' })
     @Column({
         type: 'nvarchar',
         length: 50,
-        nullable: false,
         unique: true,
-        comment: 'Category Name',
     })
     category_name: string;
 
@@ -25,37 +25,22 @@ export class Category {
         type: 'nvarchar',
         length: 500,
         nullable: true,
-        comment: 'Category Description',
     })
     description?: string;
 
     @Column({
         type: 'nvarchar',
         length: 50,
-        nullable: false,
         unique: true,
-        comment: 'Category Slug',
     })
     slug: string;
 
+    // relationship
+    @OneToMany(() => Product, (p) => p.category)
+    products: Product[];
+
     @BeforeInsert()
     @BeforeUpdate()  
-    generateSlug() {
-        this.slug = slugify(this.category_name, {
-            lower: true,        // Chuyển thành chữ thường
-            strict: true,       // Loại bỏ ký tự đặc biệt
-            remove: /[*+~.()'"!:@]/g, // Loại bỏ các ký tự không mong muốn
-            replacement: '-',   // Thay khoảng trắng bằng dấu gạch ngang
-        });
-
-        // Cắt ngắn slug nếu vượt quá 50 ký tự
-        if (this.slug.length > 50) {
-            this.slug = this.slug.substring(0, 50);
-        }
-
-        // Loại bỏ dấu gạch ngang ở cuối nếu có
-        this.slug = this.slug.replace(/-+$/, '');
-    }
     
     async validate() {
       try {
@@ -66,6 +51,7 @@ export class Category {
       }   
     }
 
+    
 
 
 }

@@ -14,7 +14,7 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
 const getById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const staff = await staffsService.getById(id);
+        const staff = await staffsService.getById(Number(id));
         sendJsonSuccess(res, staff);
     } catch (error) {
         next(error);
@@ -35,7 +35,7 @@ const updateById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const payload = req.body;
-        const staff = await staffsService.updateById(id, payload);
+        const staff = await staffsService.updateById(Number(id), payload);
         sendJsonSuccess(res, staff);
     } catch (error) {
         next(error);
@@ -45,7 +45,7 @@ const updateById = async (req: Request, res: Response, next: NextFunction) => {
 const deleteById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const staff = await staffsService.deleteById(id);
+        const staff = await staffsService.deleteById(Number(id));
         sendJsonSuccess(res, staff);
     } catch (error) {
         next(error);

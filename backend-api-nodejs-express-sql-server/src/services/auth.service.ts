@@ -1,10 +1,12 @@
 import bcrypt from 'bcrypt';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
-import Staff from '../models/staff.model';
+import { Staff } from '../entities/staff.entity';
 import { env } from '../helpers/env.helper';
 import { Response } from 'express';
+import { myDataSource } from '../data-source';
 
+const staffRepository = myDataSource.getRepository(Staff);
 const login = async ({
   email,
   password
@@ -12,52 +14,38 @@ const login = async ({
   email: string,
   password: string,
 }) => {
-  //logic đăng nhập
-  //Kiểm tra email có tồn tại không
-  const staff = await Staff.findOne({
-    email
-  })
+  // Check if email exists
+  const staff = await staffRepository.findOne({ where: { email } });
   if (!staff) {
-    //Báo lỗi chung chung
-    //Lí do để hacker biết email đúng hay sai
+    // General error message to avoid revealing if email exists
     throw createError(400, 'Email or password is invalid');
   }
 
-  //Kiểm tra mật khẩu
-  //nếu mật khâu chưa được mã hóa
-  // if(staff.password !== password){
-  //     throw createError(400, 'Email or password is invalid');
-  // }
-
-  //Sử dụng hàm so sánh mật khẩu đã được mã hóa
+  // Check password
   const passwordHash = staff.password;
-  const isValid = await bcrypt.compare(password, passwordHash); // true
+  const isValid = await bcrypt.compare(password, passwordHash);
   if (!isValid) {
-    //Đừng thông báo: Sai mật mật khẩu. Hãy thông báo chung chung
-    throw createError(400, "Invalid email or password")
+    // General error message to avoid revealing if password is incorrect
+    throw createError(400, 'Email or password is invalid');
   }
 
-  //login thành công
-  //Tạo token
+  // Login successful, create tokens
   const accessToken = jwt.sign(
-    { _id: staff._id, email: staff.email },
+    { staff_id: staff.staff_id, email: staff.email },
     env.JWT_SECRET as string,
-    {
-      expiresIn: '24h', // expires in 24 hours (24 x 60 x 60)
-    }
+    { expiresIn: '24h' } // expires in 24 hours
   );
 
   const refreshToken = jwt.sign(
-    { _id: staff._id, email: staff.email },
+    { staff_id: staff.staff_id, email: staff.email },
     env.JWT_SECRET as string,
-    {
-      expiresIn: '365d', // expires in 24 hours (24 x 60 x 60)
-    }
+    { expiresIn: '365d' } // expires in 365 days
   );
+
   return {
     accessToken,
     refreshToken
-  }
+  };
 }
 
 const getProfile = async (res: Response) => {

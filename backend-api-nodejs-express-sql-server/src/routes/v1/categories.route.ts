@@ -9,12 +9,7 @@ const router = express.Router();
  *  path <==> controller 
  */
 
-// middleware routes
-const routerMiddleware = (req, res, next) => {
-    console.log("Tác động đến toàn bộ route bên dưới", "Router Middleware");
-    next();
-};
-router.use(routerMiddleware);
+
 
 // Get All Categories
 // GET /api/v1/categories

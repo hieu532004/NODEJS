@@ -21,12 +21,12 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 // //Đăng ký một route từ file bên ngoài
-// app.use('/api/v1', categoriesRouter);
-// app.use('/api/v1', brandsRouter);
+app.use('/api/v1', categoriesRouter);
+app.use('/api/v1', brandsRouter);
 // app.use('/api/v1', queriesRouter);
-// app.use('/api/v1', productsRouter);
+app.use('/api/v1', productsRouter);
 app.use('/api/v1', staffRouter);
-// app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/auth', authRouter);
 /** -------|| END REGISTER ROUTES || --------- */
 
 // NO EDIT BEGIN HERE

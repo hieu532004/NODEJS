@@ -14,7 +14,7 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
 const getById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const category = await categoriesService.getById(id);
+        const category = await categoriesService.getById(Number(id));
         sendJsonSuccess(res, category);
     } catch (error) {
         next(error);
@@ -25,7 +25,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const payload = req.body;
         const category = await categoriesService.create(payload);
-        sendJsonSuccess(res, category,httpStatus.CREATED.statusCode,httpStatus.CREATED.message)
+        sendJsonSuccess(res, category, httpStatus.CREATED.statusCode, httpStatus.CREATED.message)
     } catch (error) {
         next(error);
     }
@@ -35,7 +35,7 @@ const updateById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const payload = req.body;
-        const category = await categoriesService.updateById(id, payload);
+        const category = await categoriesService.updateById(Number(id), payload);
         sendJsonSuccess(res, category);
     } catch (error) {
         next(error);
@@ -45,7 +45,7 @@ const updateById = async (req: Request, res: Response, next: NextFunction) => {
 const deleteById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const category = await categoriesService.deleteById(id);
+        const category = await categoriesService.deleteById(Number(id));
         sendJsonSuccess(res, category);
     } catch (error) {
         next(error);

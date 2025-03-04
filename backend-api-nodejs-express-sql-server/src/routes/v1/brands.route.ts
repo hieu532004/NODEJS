@@ -17,7 +17,7 @@ router.get("/brands/:id", brandsController.getById);
 router.post("/brands", brandsController.create);
 // Update Brand
 // PUT /api/v1/brands/:id
-router.put("/brands/:id", brandsController.updateByID);
+router.put("/brands/:id", brandsController.updateById);
 // DELETE /api/v1/brands/:id
 router.delete("/brands/:id", brandsController.deleteById);
 

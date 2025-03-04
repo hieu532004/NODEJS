@@ -14,7 +14,7 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
 const getById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const product = await productsService.getById(id);
+        const product = await productsService.getById(Number(id));
         sendJsonSuccess(res, product);
     } catch (error) {
         next(error);
@@ -25,7 +25,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const payload = req.body;
         const product = await productsService.create(payload);
-        sendJsonSuccess(res, product,httpStatus.CREATED.statusCode,httpStatus.CREATED.message)
+        sendJsonSuccess(res, product, httpStatus.CREATED.statusCode, httpStatus.CREATED.message)
     } catch (error) {
         next(error);
     }
@@ -35,7 +35,7 @@ const updateById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const payload = req.body;
-        const product = await productsService.updateById(id, payload);
+        const product = await productsService.updateById(Number(id), payload);
         sendJsonSuccess(res, product);
     } catch (error) {
         next(error);
@@ -45,7 +45,7 @@ const updateById = async (req: Request, res: Response, next: NextFunction) => {
 const deleteById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const product = await productsService.deleteById(id);
+        const product = await productsService.deleteById(Number(id));
         sendJsonSuccess(res, product);
     } catch (error) {
         next(error);
