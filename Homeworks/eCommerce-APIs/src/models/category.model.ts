@@ -2,7 +2,6 @@
 import { Schema, model, Document } from "mongoose";
 import { generateSlug } from '../helpers/slugify.helper';
 interface ICategory extends Document {
-    category_id: number;
     category_name: string;
     description?: string;
     slug: string;
