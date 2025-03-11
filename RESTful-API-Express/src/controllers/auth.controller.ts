@@ -17,6 +17,8 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 const getProfile = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const staff = await authService.getProfile(res);
+        // return without password
+        
         sendJsonSuccess(res, staff);
     }
     catch (error) {

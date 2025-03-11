@@ -5,6 +5,7 @@ import DefaultLayout from './layouts/DefaultLayout'
 import DashboardPage from './pages/DashboardPage'
 import LoginPage from './pages/LoginPage'
 import EmptyLayout from './layouts/EmptyLayout'
+import NoPage from './pages/NoPage'
 
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
           <Route index element={<LoginPage />} />
         </Route>
         
-        <Route path="*" element={<div>Not Found</div>} />
+        <Route path="*" element={<NoPage/>} />
 
       </Routes>
 

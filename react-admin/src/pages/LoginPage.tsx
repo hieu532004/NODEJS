@@ -1,77 +1,66 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex, message } from 'antd';
-import axios from 'axios'
+import axios from 'axios';
 import { env } from '../constants/getEnvs';
 import { useAuthStore } from '../stores/useAuthStore';
 import { useNavigate } from 'react-router';
 
 
-
-type TFormData = {
-    email: string;
-    password: string;
-    remember: boolean;
-}
-
 const LoginPage: React.FC = () => {
-    const { setTokens, setUser } = useAuthStore();
     const [messageApi, contextHolder] = message.useMessage();
-    const [isLoading, setIsLoading] = useState(false);
+    const { setTokens, tokens, setUser } = useAuthStore();
     const navigate = useNavigate();
 
-    const onFinish = async (values: TFormData) => {
+    const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
-        // TODO: Add your own logic to handle form submission here.
         try {
-            setIsLoading(true);
-            const responseLogin = await axios.post(
-                `${env.API_URL}/v1/auth/login`,
-                { email: values.email, password: values.password },
-            );
-            console.log('<<=== 🚀 responseLogin ===>>', responseLogin);
+            const responseLogin = await axios.post(`${env.API_URL}/v1/auth/login`,
+                {
+                    email: values.email,
+                    password: values.password,
+                });
+            console.log(responseLogin);
             if (responseLogin.status === 200) {
-                // 1. luu tokens
-                setTokens(responseLogin.data.data)
-                // 2. Lấy thông tin Profile của user vừa login thành công
+                // 1: save token
+                setTokens(responseLogin.data.data);
+                //-----------------
+                // 2: lấy thông tin Profile cua user vừa login thành công
                 const responseProfile = await axios.get(
                     `${env.API_URL}/v1/auth/get-profile`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${responseLogin.data.data.accessToken}`,
                     },
-
                 });
-
-                //3. Lưu thông tin profile vào local Storage
+                //-------------------
+                // 3: Lưu thông tin Profile vào local storage
                 if (responseProfile.status === 200) {
                     setUser(responseProfile.data.data);
-                    //ToDO: navigate to dashboard
-                }
-
-                //4. Chuyển hướng đến trang dashboard
-                navigate('/')
-
+                    //ToDo: navigate to Dashboard
+                    navigate('/');
+                }       
+                //-------------------
+                // 4: chuyển hướng sang trang Dashboard
+                
             } else {
                 messageApi.open({
                     type: 'error',
-                    content: 'Username or password invalid',
+                    content: 'Email or password invalid!',
                 });
             }
         } catch (error) {
-            console.log('<<=== 🚀 error ===>>', error);
+            console.error('error', error);
             messageApi.open({
                 type: 'error',
-                content: 'Username or password invalid',
+                content: 'Email or password invalid!',
             });
-        }
-        finally {
-            setIsLoading(false);
+
         }
     };
 
     return (
-        <Flex className='h-screen' justify='center' align='center' >
+        <Flex justify="center" align="center" style={{ height: '100vh' }}>
             {contextHolder}
             <Form
                 name="login"
@@ -105,8 +94,8 @@ const LoginPage: React.FC = () => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button disabled={isLoading} loading={isLoading} block type="primary" htmlType="submit">
-                        {isLoading ? 'Singing...' : 'Log in'}
+                    <Button block type="primary" htmlType="submit">
+                        Log in
                     </Button>
                 </Form.Item>
             </Form>

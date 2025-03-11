@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import {
   DesktopOutlined,
   FileOutlined,
@@ -7,8 +7,10 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import { Outlet } from 'react-router';
+import { Avatar, Breadcrumb, Flex, Layout, Menu, theme, Dropdown } from 'antd';
+import { useAuthStore } from '../stores/useAuthStore';
+import UserInfo from '../components/UserInfo';
+import { useNavigate } from 'react-router';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -40,20 +42,32 @@ const items: MenuItem[] = [
   getItem('Files', '9', <FileOutlined />),
 ];
 
-const DefaultLayout: React.FC = () => {
+const App: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+const {user, tokens} = useAuthStore()
+const navigate = useNavigate()
+  // Kiểm tra trạng thái login
+  useEffect(()=>{
+    if (!tokens && !user) {
+      navigate('/login')
+    }
+  },[tokens, user, navigate])
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh', width: '100%' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="demo-logo-vertical" />
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} />
+        <Header style={{ padding: 0, background: colorBgContainer }} >
+          <Flex style={{padding: '0 20px'}} className='py-5' gap={10} align='center' justify="end" >
+          <UserInfo />
+          </Flex>
+        </Header>
         <Content style={{ margin: '0 16px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item>User</Breadcrumb.Item>
@@ -67,7 +81,7 @@ const DefaultLayout: React.FC = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            <Outlet />
+            Bill is a cat.
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
@@ -78,4 +92,4 @@ const DefaultLayout: React.FC = () => {
   );
 };
 
-export default DefaultLayout;
+export default App;
