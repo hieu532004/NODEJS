@@ -10,7 +10,7 @@ import type { MenuProps } from 'antd';
 import { Avatar, Breadcrumb, Flex, Layout, Menu, theme, Dropdown } from 'antd';
 import { useAuthStore } from '../stores/useAuthStore';
 import UserInfo from '../components/UserInfo';
-import { useNavigate } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -31,15 +31,18 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
+  getItem('Dashboard', '', <PieChartOutlined />),
+  getItem('Categories', 'categories', <DesktopOutlined />),
+  getItem('Brands', 'brands', <UserOutlined />, [
     getItem('Tom', '3'),
     getItem('Bill', '4'),
     getItem('Alex', '5'),
   ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
+  getItem('Products', 'products', <DesktopOutlined />),
+  getItem('Customers', 'customers', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
+  getItem('Staffs', 'staffs', <FileOutlined />),
+  getItem('Oders', 'oders', <FileOutlined />),
+
 ];
 
 const App: React.FC = () => {
@@ -47,28 +50,37 @@ const App: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-const {user, tokens} = useAuthStore()
-const navigate = useNavigate()
+  const { user, tokens } = useAuthStore()
+  const navigate = useNavigate()
   // Kiểm tra trạng thái login
-  useEffect(()=>{
+  useEffect(() => {
     if (!tokens && !user) {
       navigate('/login')
     }
-  },[tokens, user, navigate])
+  }, [tokens, user, navigate])
 
   return (
     <Layout style={{ minHeight: '100vh', width: '100%' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={['1']}
+          mode="inline"
+          items={items}
+          onClick={({ key }) => {
+            console.log(key)
+            navigate(`/${key}`)
+          }}
+        />
       </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }} >
-          <Flex style={{padding: '0 20px'}} className='py-5' gap={10} align='center' justify="end" >
-          <UserInfo />
+          <Flex style={{ padding: '0 20px' }} className='py-5' gap={10} align='center' justify="end" >
+            <UserInfo />
           </Flex>
         </Header>
-        <Content style={{ margin: '0 16px' }}>
+        <Content style={{ margin: '0 16px', maxWidth: '1200px', width: '100%' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item>User</Breadcrumb.Item>
             <Breadcrumb.Item>Bill</Breadcrumb.Item>
@@ -81,7 +93,7 @@ const navigate = useNavigate()
               borderRadius: borderRadiusLG,
             }}
           >
-            Bill is a cat.
+            <Outlet />
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>

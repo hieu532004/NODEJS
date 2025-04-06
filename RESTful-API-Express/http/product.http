@@ -29,3 +29,7 @@ Content-Type: application/json
 
 ### updatte
 DELETE  http://localhost:8082/api/v1/products/67b7171dc2363f3c1a6f709a
+
+### get all
+GET http://localhost:8082/api/v1/products
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2M0ODcxYjQ2ODA2NjBmOGU2ZGRjNDQiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MjQ3NjM4OCwiZXhwIjoxNzQyNTYyNzg4fQ.ysmrHnqG1SJKYsolsY9FaP6HNLeYCeLwe9yIQWSYH6w

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router';
 
 const LoginPage: React.FC = () => {
     const [messageApi, contextHolder] = message.useMessage();
-    const { setTokens, tokens, setUser } = useAuthStore();
+    const { setTokens, setUser } = useAuthStore();
     const navigate = useNavigate();
 
     const onFinish = async (values: any) => {
