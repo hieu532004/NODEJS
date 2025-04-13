@@ -10,12 +10,12 @@ This project is part of the Node.js course at Softech. Its main goal is to build
 
 2. **Install dependencies**:
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Run the application**:
    ```bash
-   npm start
+   pnpm run dev
    ```
    The application will run in development mode at `http://localhost:3000` (or the port specified in the configuration file).
 
